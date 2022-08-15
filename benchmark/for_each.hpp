@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 namespace benchmark {
 
     template <class F, class T, T... vals>

@@ -1,8 +1,12 @@
 #pragma once
 
+#include <algorithm>
+#include <cassert>
 #include <queue>
 #include <random>
+
 #include "includes/definitions.hpp"
+#include "includes/utils.hpp"
 
 // This implementation of the JP algorithm is deliberately _very_ bad. It is
 // only here to be used as a naive contender, showing how to use the contender

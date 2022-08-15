@@ -1,5 +1,9 @@
 #pragma once
 
+#include <iostream>
+#include <string_view>
+#include <tuple>
+
 #include "benchmark/verification_instance_generation.hpp"
 #include "includes/binary_includes.hpp"
 #include "naive_jarnik_prim.hpp"
