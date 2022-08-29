@@ -8,6 +8,8 @@
 #include "includes/binary_includes.hpp"
 #include "naive_jarnik_prim.hpp"
 #include "naive_kruskal.hpp"
+#include "my_first_.h"
+#include "Boruvka.h"
 
 namespace mst_construction {
 namespace params {
@@ -36,18 +38,23 @@ Contender(std::string_view, F) -> Contender<F>;
 
 // Register your contenders in this tuple:
 constexpr std::tuple contenders{
+
+    //naive boruvka as contender:
+    Contender{"naive_boruvka",
+         [] { return joanapl::NaiveBoruvka();}
+    },
     // Some examples:
 
     // Slow kruskal, deactivate for larger graphs (log_m > 16)
     // Contender{"naive_kruskal", [] { return NaiveKruskal(); }},
 
     // Faster kruskal from the binary library
-    Contender{"fast_kruskal",
+    /*Contender{"fast_kruskal",
               [] {
                 return [](const algen::WEdgeList& el, const algen::VertexId n) {
                   return fast_kruskal(el, n);
                 };
-              }},
+              }},*/
 
     // Jarnik-Prim with inefficient addressable PQ
 //    Contender{"naive_jarnik_prim", [] { return NaiveJarnikPrim(); }},
@@ -89,11 +96,11 @@ struct Experiment {
 };
 
 struct ExperimentSuite {
-  std::size_t log_n_begin = 14;
-  std::size_t log_n_end = 19;
-  std::size_t edge_factor_begin = 1;
-  std::size_t edge_factor_end = 256;
-  algen::Weight max_weight = 255;
+  std::size_t log_n_begin = 14; // was 14
+  std::size_t log_n_end = 14; //was 19
+  std::size_t edge_factor_begin = 32; //start was 1
+  std::size_t edge_factor_end = 64; // was 256
+  algen::Weight max_weight = 256; // was 255
   std::size_t step_size_n = 1;
   std::size_t step_size_edge_factor = 2;
   std::size_t cur_log_n = log_n_begin;

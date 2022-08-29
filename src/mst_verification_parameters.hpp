@@ -42,14 +42,14 @@ namespace mst_verification {
                     // Some examples:
 
                     // A naive MST verifier that executes one DFS in the given ST per graph edge.
-//                    Contender{"naive_dfs_verify", [] { return NaiveDFSBasedVerifier(); }},
+                    Contender{"naive_dfs_verify", [] { return NaiveDFSBasedVerifier(); }},
 
                     // An MST verifier that is implemented in the binary library.
-                    Contender{"fast_verify_from_binary", [] {
+                    /*Contender{"fast_verify_from_binary", [] {
                         return [](const algen::WEdgeList& edges, const algen::WEdgeList& st_edges, const int num_vertices) {
                             return verify_spanning_tree(edges, st_edges, num_vertices);
                         };
-                    }},
+                    }},*/
 
                     // An example contender that always outputs yes (not very accurate).
 //                    Contender{"always_outputs_yes", [] {
