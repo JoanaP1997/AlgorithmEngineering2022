@@ -10,6 +10,7 @@
 #include "naive_kruskal.hpp"
 #include "my_first_.h"
 #include "Boruvka.h"
+#include "FilterBoruvka.h"
 
 namespace mst_construction {
 namespace params {
@@ -43,6 +44,11 @@ constexpr std::tuple contenders{
     Contender{"naive_boruvka",
          [] { return joanapl::NaiveBoruvka();}
     },
+
+    //filter boruvka:
+    Contender{"filter_boruvka",
+             [] {return joanapl::filterBoruvka();}
+    }
     // Some examples:
 
     // Slow kruskal, deactivate for larger graphs (log_m > 16)

@@ -27,6 +27,10 @@ namespace joanapl {
         }
 
         algen::WEdgeList operator()(const algen::WEdgeList& edge_list, const algen::VertexId num_vertices) {
+            return calculateMST(edge_list, num_vertices);
+        }
+
+        algen::WEdgeList calculateMST(const algen::WEdgeList &edge_list, const unsigned long num_vertices) {
             algen::WEdgeList el_copy = edge_list;
             //init variables:
             forest_edges = *(new algen::WEdgeList (0));
@@ -76,7 +80,6 @@ namespace joanapl {
             }
             add_inverted_edges();
             return forest_edges;
-
         }
 
         void add_inverted_edges() {
