@@ -22,11 +22,11 @@ else()
     message(ERROR "No library binary file exists for '${CMAKE_CXX_COMPILER_ID}'. If you absolutely need to use this compiler, please contact the Algorithm Engineering lecture team.")
 endif()
 
-add_library(imported_binaries STATIC IMPORTED)
+add_library(imported_binaries STATIC IMPORTED ../src/FasterBoruvkaOne.h)
 set_target_properties(imported_binaries PROPERTIES IMPORTED_LOCATION "${path_to_binary_lib}")
 
-add_executable(mst_construction_benchmark mst_construction_benchmark.cpp)
+add_executable(mst_construction_benchmark mst_construction_benchmark.cpp ../src/FasterBoruvkaOne.h)
 target_link_libraries(mst_construction_benchmark PRIVATE base_target implementation imported_binaries)
 
-add_executable(mst_verification_benchmark mst_verification_benchmark.cpp)
+add_executable(mst_verification_benchmark mst_verification_benchmark.cpp ../src/FasterBoruvkaOne.h)
 target_link_libraries(mst_verification_benchmark PRIVATE base_target implementation imported_binaries)

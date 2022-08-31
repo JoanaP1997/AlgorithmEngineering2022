@@ -50,7 +50,7 @@ set(CMAKE_CXX_EXTENSIONS FALSE)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads)
 
-add_library(base_target INTERFACE)
+add_library(base_target INTERFACE src/FasterBoruvkaOne.h)
 target_include_directories(base_target INTERFACE ${CMAKE_SOURCE_DIR})
 
 add_subdirectory(src)

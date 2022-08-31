@@ -1,14 +1,15 @@
 //
-// Created by joana on 29.08.22.
+// Created by joana on 31.08.22.
 //
-
 #include "includes/definitions.hpp"
 #include "set"
 #include "iterator"
 #include <chrono>
 #include <execution>
+#include <iostream>
+#include "datastructures/naive_union_find.hpp"
 
-namespace joanapl {
+namespace joanaple {
 
     algen::WEdgeList forest_edges;
     bool completed;
@@ -22,34 +23,27 @@ namespace joanapl {
     algen::WEdge temp_edge;
     int version_ = 0;
 
-    struct NaiveBoruvka {
+    struct FasterBoruvkaOne {
 
 
 
-        NaiveBoruvka(){
+        FasterBoruvkaOne(){
 
         }
 
-        NaiveBoruvka(int version){
+        FasterBoruvkaOne(int version){
             version_ = version;
         }
 
         const algen::WEdgeList empty_edge_list = *(new algen::WEdgeList (0));
 
         void fill_0_to_n(std::vector<uint64_t>& vector){
-            if(version_ == 5){
                 for (int i = 0; i < vector.size(); ++i) {
                     vector[i] = i;
                 }
-            } else {
-                for (int i = 0; i < vector.size(); ++i) {
-                    vector[i] = i;
-                }
-            }
         }
 
         algen::WEdgeList operator()(const algen::WEdgeList& edge_list, const algen::VertexId num_vertices) {
-
             forest_edges = *(new algen::WEdgeList(0));
             return calculateMST(edge_list, num_vertices, forest_edges);
         }
@@ -59,26 +53,17 @@ namespace joanapl {
             //init variables:
             const algen::WEdgeList empty_edge_list_n = *(new algen::WEdgeList (num_vertices));
             if(forest_edges.empty()) {
-                if(version_ == 1 || version_ == 3 || version_ == 8){
-                    forest_edges = empty_edge_list;
-                }else {
-                    forest_edges = *(new algen::WEdgeList(0));
-                }
+                forest_edges = empty_edge_list;
                 components = *(new UnionFind<uint64_t> (num_vertices)); //only new components if we are not in one filter run
             }
             completed = false;
-
             vertices = *(new std::vector<uint64_t>(num_vertices));
             fill_0_to_n(vertices); //fill vertices with numbers from 0 to num_vertices - 1
 
             //while-loop:
             while(not completed) {
                 //find the cheapest edge for each node outside its own component:
-                if(version_ == 2 || version_ == 3 || version_ == 8){
-                    cheapest_edges = empty_edge_list_n;
-                } else {
-                    cheapest_edges = *(new algen::WEdgeList(num_vertices));
-                }
+                cheapest_edges = empty_edge_list_n;
                 for (int i = 0; i < el_copy.size(); ++i) {
                     u = el_copy.at(i).head;
                     v = el_copy.at(i).tail;
@@ -99,16 +84,16 @@ namespace joanapl {
                     for (int i = 0; i < vertices.size(); ++i) {
                         //add all components with cheapest edge != null to forest:
                         bool add_edge;
-                        add_edge = !edge_is_in_vector(cheapest_edges.at(i), forest_edges) && cheapest_edges.at(i).weight != 0;
-                            if(add_edge){
-                                forest_edges.push_back(cheapest_edges.at(i));
-                                u = cheapest_edges.at(i).head;
-                                v = cheapest_edges.at(i).tail;
-                                if (components.find(u) != components.find(v)) {
-                                    components.do_union(u, v);
-                                }
+                        add_edge = cheapest_edges.at(i).weight != 0 && !edge_is_in_vector(cheapest_edges.at(i), forest_edges);
+                        if(add_edge){
+                            forest_edges.push_back(cheapest_edges.at(i));
+                            u = cheapest_edges.at(i).head;
+                            v = cheapest_edges.at(i).tail;
+                            if (components.find(u) != components.find(v)) {
+                                components.do_union(u, v);
                             }
                         }
+                    }
                     delete_edges_in_one_component(components, el_copy);
                 }
             }
@@ -120,21 +105,11 @@ namespace joanapl {
         void add_inverted_edges() {
             const auto mst_one_way_size = (forest_edges).size();
             (forest_edges).reserve(2 * mst_one_way_size);
-            if(version_ == 5){
-
                 for (algen::VertexId i = 0; i < mst_one_way_size; ++i) {
                     (forest_edges).emplace_back((forest_edges)[i].head, (forest_edges)[i].tail,
                                                 (forest_edges)[i].weight);
-                }
-            }else {
-                for (algen::VertexId i = 0; i < mst_one_way_size; ++i) {
-                    (forest_edges).emplace_back((forest_edges)[i].head, (forest_edges)[i].tail,
-                                                (forest_edges)[i].weight);
-                }
             }
-            //print_graph(forest_edges);
             filterOutDuplicates(forest_edges);
-            //print_graph(forest_edges);
 
         }
 
@@ -152,23 +127,12 @@ namespace joanapl {
         void delete_edges_in_one_component(NaiveUnionFind<uint64_t>& components, algen::WEdgeList& edges){
             int max = edges.size();
             int j = 0;
-            if(version_ == 5){
-
-                for (int i = 0; i < max; ++i) {
-                    if (components.find(edges.at(i - j).head) == components.find(edges.at(i - j).tail)) {
-                        temp_edge = edges.at(i - j);
-                        edges.erase(edges.begin() + i - j);
-                        j++;
-                    }
-                }
-            } else {
                 for (int i = 0; i < max; ++i) {
                     if (components.find(edges.at(i - j).head) == components.find(edges.at(i - j).tail)) {
                         edges.erase(edges.begin() + i - j);
                         j++;
                     }
                 }
-            }
         }
 
         static bool isSameEdge(algen::WEdge& w1, algen::WEdge& w2){
@@ -176,29 +140,12 @@ namespace joanapl {
         }
 
         static bool edge_is_in_vector(algen::WEdge& w, algen::WEdgeList& vector){
-            if(version_ == 5){
-                uint64_t half_point = vector.size() / 2;
-                if(half_point % 2 != 0){
-                    half_point += 1;
-                }
-
-                for (int i = half_point; i < vector.size(); ++i) {
-                    if (isSameEdge(w, vector.at(i))) {
-                        return true;
-                    }
-                    if(isSameEdge(w, vector.at(vector.size() - i - 1))){
-                        return true;
-                    }
-                }
-                return false;
-            } else {
                 for (int i = 0; i < vector.size(); ++i) {
                     if (isSameEdge(w, vector.at(i))) {
                         return true;
                     }
                 }
                 return false;
-            }
         }
 
         static bool sortEdgesByHeadThenTail(algen::WEdge w1, algen::WEdge w2){
@@ -212,24 +159,12 @@ namespace joanapl {
         }
 
         algen::WEdgeList filterOutDuplicates(algen::WEdgeList& edges) {
-            //std::cout << "Number of elements to filter from: " << edges.size() << "\n";
-
             if (edges.size() == 0) {
                 return edges;
             }
-            //auto start_time = std::chrono::high_resolution_clock::now();
-            if (version_ == 4 || version_ == 5 || version_ == 8) {
-                std::sort(std::execution::par, edges.begin(), edges.end(), sortEdgesByHeadThenTail);
-            } else {
-                std::sort(edges.begin(), edges.end(), sortEdgesByHeadThenTail);
-            }
-            //auto end_time = std::chrono::high_resolution_clock::now();
+            std::sort(edges.begin(), edges.end(), sortEdgesByHeadThenTail);
             auto last = std::unique(edges.begin(), edges.end(), isSameEdge);
-
             edges.erase(last, edges.end());
-
-            //auto time = end_time- start_time;
-            //std::cout << "filter time: " << time/std::chrono::nanoseconds(1) << "\n";
             return edges;
         }
 
@@ -240,13 +175,11 @@ namespace joanapl {
         }
 
         bool is_preffered_over(algen::WEdge a, algen::WEdge b){
-            return (a.weight == b.weight && a.head == b.head && a.tail < b.tail) or
-                   (a.weight == b.weight && a.head < b.head) or
-                   (a.weight < b.weight) or
-                   (b.weight == 0);
-            }
+            return (b.weight == 0) or (a.weight < b.weight) or (a.weight == b.weight && a.head < b.head) or (a.weight == b.weight && a.head == b.head && a.tail < b.tail);
+        }
 
 
     };
 
 }
+

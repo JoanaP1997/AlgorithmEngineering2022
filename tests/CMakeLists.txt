@@ -13,8 +13,8 @@ else()
     message(ERROR "No library binary file exists for '${CMAKE_CXX_COMPILER_ID}'. If you absolutely need to use this compiler, please contact the Algorithm Engineering lecture team.")
 endif()
 
-add_library(imported_binaries_for_tests STATIC IMPORTED)
+add_library(imported_binaries_for_tests STATIC IMPORTED ../src/FasterBoruvkaOne.h)
 set_target_properties(imported_binaries_for_tests PROPERTIES IMPORTED_LOCATION "${path_to_binary_lib}")
 
-add_executable(test_edge_classification test_edge_classification.cpp)
+add_executable(test_edge_classification test_edge_classification.cpp ../src/FasterBoruvkaOne.h)
 target_link_libraries(test_edge_classification PRIVATE base_target  imported_binaries_for_tests)

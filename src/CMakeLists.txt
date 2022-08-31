@@ -8,7 +8,7 @@ file(GLOB_RECURSE srcs CONFIGURE_DEPENDS
         *.cpp *.cxx *.c++ *.cc *.C *.CPP)
 
 if (NOT srcs)
-    add_library(implementation INTERFACE)
+    add_library(implementation INTERFACE FasterBoruvkaOne.h)
     target_include_directories(implementation INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
     target_link_libraries(implementation INTERFACE Threads::Threads)
 else ()
@@ -18,7 +18,7 @@ else ()
     # The benchmark executables need the parameters included here,
     # so don't remove them if you list your sources manually.
     add_library(implementation STATIC
-            ${srcs} ${headers} my_first_.h Boruvka.h)
+            ${srcs} ${headers} my_first_.h Boruvka.h FasterBoruvkaOne.h)
 
     set_target_properties(implementation PROPERTIES LINKER_LANGUAGE CXX)
     target_include_directories(implementation INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
