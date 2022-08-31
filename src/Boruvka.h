@@ -67,7 +67,6 @@ namespace joanapl {
                 components = *(new UnionFind<uint64_t> (num_vertices)); //only new components if we are not in one filter run
             }
             completed = false;
-
             vertices = *(new std::vector<uint64_t>(num_vertices));
             fill_0_to_n(vertices); //fill vertices with numbers from 0 to num_vertices - 1
 
@@ -99,9 +98,17 @@ namespace joanapl {
                     for (int i = 0; i < vertices.size(); ++i) {
                         //add all components with cheapest edge != null to forest:
                         bool add_edge;
-                        add_edge = !edge_is_in_vector(cheapest_edges.at(i), forest_edges) && cheapest_edges.at(i).weight != 0;
+                        if(version_ == 0){
+                            add_edge = cheapest_edges.at(i).weight != 0 && !edge_is_in_vector(cheapest_edges.at(i), forest_edges);
+                        } else if (version_ == 10){
+                            add_edge = !edge_is_in_vector(cheapest_edges.at(i), forest_edges) &&
+                                       cheapest_edges.at(i).weight != 0;
+                        } else {
+                            add_edge = cheapest_edges.at(i).weight != 0;
+                        }
                             if(add_edge){
                                 forest_edges.push_back(cheapest_edges.at(i));
+                                if(version_ == 11) {cheapest_edges.at(i).weight = 0;}
                                 u = cheapest_edges.at(i).head;
                                 v = cheapest_edges.at(i).tail;
                                 if (components.find(u) != components.find(v)) {

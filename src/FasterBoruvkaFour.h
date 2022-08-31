@@ -4,13 +4,12 @@
 #include "includes/definitions.hpp"
 #include "set"
 #include "iterator"
+#include "datastructures/FastUnionFind.hpp"
 #include <chrono>
 #include <execution>
 #include <iostream>
-#include "datastructures/naive_union_find.hpp"
-#include "datastructures/FastUnionFind.hpp"
 
-namespace joanaplewni {
+namespace joanaplewni6 {
 
     bool completed;
     std::vector<uint64_t> vertices;
@@ -24,12 +23,15 @@ namespace joanaplewni {
     algen::WEdge temp_edge;
     int version_ = 0;
 
-    struct FasterBoruvkaOne {
-        FasterBoruvkaOne(){
+    struct FasterBoruvkaFour {
+
+    public:
+
+        FasterBoruvkaFour(){
 
         }
 
-        FasterBoruvkaOne(int version){
+        FasterBoruvkaFour(int version){
             version_ = version;
         }
 

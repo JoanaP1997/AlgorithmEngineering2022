@@ -164,7 +164,7 @@ namespace joanaplewn {
             if (edges.size() == 0) {
                 return edges;
             }
-            std::sort(std::execution::par, edges.begin(), edges.end(), sortEdgesByHeadThenTail);
+            std::sort(edges.begin(), edges.end(), sortEdgesByHeadThenTail);
             auto last = std::unique(edges.begin(), edges.end(), isSameEdge);
             edges.erase(last, edges.end());
             return edges;

@@ -11,11 +11,12 @@
 #include "my_first_.h"
 #include "Boruvka.h"
 #include "FilterBoruvka.h"
-#include "FasterBoruvkaOne.h"
+/*#include "FasterBoruvkaOne.h"
 #include "FasterBoruvkaTwo.h"
-#include "FasterBoruvkaThree.h"
+
 #include "FasterBoruvkaFour.h"
-#include "FasterBoruvkaFive.h"
+#include "FasterBoruvkaFive.h"*/
+#include "FasterBoruvkaThree.h"
 
 namespace mst_construction {
 namespace params {
@@ -48,15 +49,15 @@ constexpr std::tuple contenders{
     //naive boruvka as contender:
 
                 /*Contender{"FasterBoruvkaFive",
-                          [] { return joanaplewnia::FasterBoruvkaOne(0);}
+                          [] { return joanaplewnia::FasterBoruvkaFour(0);}
                 },
 
                 Contender{"FasterBoruvkaFour_fast_union_find",
-                          [] { return joanaplewni::FasterBoruvkaOne(0);}
+                          [] { return joanaplewni::FasterBoruvkaFour(0);}
                 },*/
 
                 /*Contender{"FasterBoruvkaThree",
-                        [] { return joanaplewn::FasterBoruvkaOne(0);}
+                        [] { return joanaplewn::FasterBoruvkaFour(0);}
                 },
 
                Contender{"FasterBoruvkaNaive",
@@ -67,13 +68,18 @@ constexpr std::tuple contenders{
                           [] {return joanapl::NaiveBoruvka();
                 }}*/
 
-    /*Contender{"naive_boruvka_1",
-         [] { return joanapl::NaiveBoruvka(1);}
-    },
-
-                Contender{"naive_boruvka_2",
-                          [] { return joanapl::NaiveBoruvka(2);}
-                },*/
+    /*Contender{"naive_boruvka",
+         [] { return joanapl::NaiveBoruvka(0);}
+    },*/
+    /*Contender{"components_find_once_only",
+              [] { return joanaplewn::FasterBoruvkaOne();}
+    },*/
+                /*Contender{"naive_boruvka_addEdge",
+                          [] { return joanapl::NaiveBoruvka(10);}
+                },
+    Contender{"naive_boruvka__edges0",
+              [] { return joanapl::NaiveBoruvka(11);}
+    },*/
                 /*Contender{"naive_boruvka_6",
                           [] { return joanapl::NaiveBoruvka(6);}
                 },*/
@@ -85,9 +91,18 @@ constexpr std::tuple contenders{
                           [] { return joanapl::NaiveBoruvka(3);}
                 },*/
     //filter boruvka:
-    Contender{"filter_boruvka_500",
-             [] {return joanapl::filterBoruvka(500);}
+    Contender{"filter_boruvka_16000_fastUnion_4",
+             [] {return joanaplewni::filterBoruvka(16000, 4, 1);}
     },
+    Contender{"filter_boruvka_16000_fastUnion_2",
+              [] {return joanaplewni::filterBoruvka(16000, 2, 1);}
+    },
+    Contender{"filter_boruvka_16000_fastUnion_6",
+              [] {return joanaplewni::filterBoruvka(16000, 6, 1);}
+    },
+    /*Contender{"filter_boruvka_16000_fastUnion_16",
+              [] {return joanaplewni::filterBoruvka(16000, 16, 1);}
+    },*/
 
     //filter boruvka:
     /*Contender{"filter_boruvka_2000_4",
@@ -146,7 +161,7 @@ constexpr std::tuple contenders{
 };
 constexpr auto num_contenders = std::tuple_size_v<decltype(contenders)>;
 
-constexpr std::size_t iterations = 3; //was 4
+constexpr std::size_t iterations = 4; //was 4
 struct Experiment {
   std::size_t log_n;
   std::size_t edge_factor;
@@ -158,11 +173,11 @@ struct Experiment {
 };
 
 struct ExperimentSuite {
-  std::size_t log_n_begin = 8; // was 14
-  std::size_t log_n_end = 8; //was 19
-  std::size_t edge_factor_begin = 16; //start was 1
-  std::size_t edge_factor_end = 32; // was 256
-  algen::Weight max_weight = 128; // was 255
+  std::size_t log_n_begin = 12; // was 14
+  std::size_t log_n_end = 16; //was 19
+  std::size_t edge_factor_begin = 1; //start was 1
+  std::size_t edge_factor_end = 128; // was 256
+  algen::Weight max_weight = 256; // was 255
   std::size_t step_size_n = 1;
   std::size_t step_size_edge_factor = 2;
   std::size_t cur_log_n = log_n_begin;
