@@ -64,8 +64,10 @@ namespace joanaplewni{
 
                     u = el_copy.at(i).head;
                     v = el_copy.at(i).tail;
+                    if(version_ == 1){
                     uint64_t component_u = components.find(u);
                     uint64_t component_v = components.find(v);
+                    
                     //see if edge connects two different components:
                     if( component_u != component_v) {
                         //get cheapest edge for component of u and check preference:
@@ -75,6 +77,17 @@ namespace joanaplewni{
                         if ((is_preffered_over(el_copy.at(i), cheapest_edges.at(component_v)))) {
                             cheapest_edges.at(component_v) = el_copy.at(i);
                         }
+                    }
+                    } else {
+                        if(components.find(u) != components.find(v)) {
+                        //get cheapest edge for component of u and check preference:
+                        if ((is_preffered_over(el_copy.at(i), cheapest_edges.at(components.find(u))))) {
+                            cheapest_edges.at(components.find(u)) = el_copy.at(i);
+                        }
+                        if ((is_preffered_over(el_copy.at(i), cheapest_edges.at(components.find(v))))) {
+                            cheapest_edges.at(components.find(v)) = el_copy.at(i);
+                        }
+                    }
                     }
                 }
                 //check if there are no edges between different components left:
@@ -233,7 +246,7 @@ namespace joanaplewni{
                 if(boruvka_version == 0) {
                     temp_edges = joanapl::NaiveBoruvka().calculateMST(copy, num_vertices, forest_edges);
                 } else if (boruvka_version == 1){
-                    temp_edges = joanaplewni::FasterBoruvkaFour().calculateMST(copy, num_vertices, forest_edges);
+                    temp_edges = joanaplewni::FasterBoruvkaFour(1).calculateMST(copy, num_vertices, forest_edges);
                 } else {
                     temp_edges = joanapl::NaiveBoruvka(10).calculateMST(copy, num_vertices, forest_edges);
                 }

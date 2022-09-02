@@ -47,50 +47,39 @@ Contender(std::string_view, F) -> Contender<F>;
 constexpr std::tuple contenders{
 
     //naive boruvka as contender:
-
-                /*Contender{"FasterBoruvkaFive",
-                          [] { return joanaplewnia::FasterBoruvkaFour(0);}
-                },
-
-                Contender{"FasterBoruvkaFour_fast_union_find",
-                          [] { return joanaplewni::FasterBoruvkaFour(0);}
-                },*/
-
-                /*Contender{"FasterBoruvkaThree",
-                        [] { return joanaplewn::FasterBoruvkaFour(0);}
-                },
-
-               Contender{"FasterBoruvkaNaive",
+    Contender{"naive_boruvka",
                           [] { return joanapl::NaiveBoruvka(0);}
-                },*/
+                },
 
-                /*Contender{"naiver Boruvka",
-                          [] {return joanapl::NaiveBoruvka();
-                }}*/
+    //naive with FastUnionFind:
+    Contender{"naive_boruvka_fastUnionFind",
+                          [] { return joanaplewni::FasterBoruvkaFour(0);}
+                },
+                
+    //naive with find() saved:
+    Contender{"naive_boruvka",
+                          [] { return joanapl::NaiveBoruvka(1);}
+                },
 
-    /*Contender{"naive_boruvka",
-         [] { return joanapl::NaiveBoruvka(0);}
-    },*/
-    /*Contender{"components_find_once_only",
-              [] { return joanaplewn::FasterBoruvkaOne();}
-    },*/
-                /*Contender{"naive_boruvka_addEdge",
+    //naive with bad order of checking if edge is already in forest:
+    Contender{"naive_boruvka",
                           [] { return joanapl::NaiveBoruvka(10);}
                 },
-    Contender{"naive_boruvka__edges0",
-              [] { return joanapl::NaiveBoruvka(11);}
-    },*/
-                /*Contender{"naive_boruvka_6",
-                          [] { return joanapl::NaiveBoruvka(6);}
-                },*/
 
-                /*Contender{"NaiveBoruvka",
-                          [] { return joanapl::NaiveBoruvka(0);}
-                },*/
-                /*Contender{"naive_boruvka_3",
-                          [] { return joanapl::NaiveBoruvka(3);}
-                },*/
+    //naive with dummy-element to check if edge is already in forest:
+    Contender{"naive_boruvka",
+                          [] { return joanapl::NaiveBoruvka(11);}
+                },
     //filter boruvka:
+    //non-engineered filter-boruvka:
+    Contender{"filter_boruvka_1000_normalUnion_4",
+             [] {return joanaplewni::filterBoruvka(1000, 4, 0);}
+    },
+    //completely engineered version filter-boruvka:
+    Contender{"filter_boruvka_1000_normalUnion_4",
+             [] {return joanaplewni::filterBoruvka(1000, 4, 1);}
+    },
+    //different pivots:
     Contender{"filter_boruvka_16000_fastUnion_4",
              [] {return joanaplewni::filterBoruvka(16000, 4, 1);}
     },
@@ -100,9 +89,25 @@ constexpr std::tuple contenders{
     Contender{"filter_boruvka_16000_fastUnion_6",
               [] {return joanaplewni::filterBoruvka(16000, 6, 1);}
     },
-    /*Contender{"filter_boruvka_16000_fastUnion_16",
-              [] {return joanaplewni::filterBoruvka(16000, 16, 1);}
-    },*/
+    //different thresholds:
+    Contender{"filter_boruvka_1000_fastUnion_4",
+             [] {return joanaplewni::filterBoruvka(1000, 4, 1);}
+    },
+    Contender{"filter_boruvka_2000_fastUnion_4",
+              [] {return joanaplewni::filterBoruvka(2000, 4, 1);}
+    },
+    Contender{"filter_boruvka_4000_fastUnion_4",
+              [] {return joanaplewni::filterBoruvka(4000, 4, 1);}
+    },
+    Contender{"filter_boruvka_500_fastUnion_4",
+              [] {return joanaplewni::filterBoruvka(500, 4, 1);}
+    },
+    Contender{"filter_boruvka_8000_fastUnion_4",
+              [] {return joanaplewni::filterBoruvka(8000, 4, 1);}
+    },
+    Contender{"filter_boruvka_16000_fastUnion_4",
+              [] {return joanaplewni::filterBoruvka(16000, 4, 1);}
+    },
 
     //filter boruvka:
     /*Contender{"filter_boruvka_2000_4",
